@@ -29,6 +29,8 @@
 #include "input.h"
 #include "disc.h"
 
+#include "libRetroReversing/include/libRR.h"
+
 
 #define MEDNAFEN_CORE_NAME                   "Beetle Saturn"
 #define MEDNAFEN_CORE_VERSION                "v1.29.0"
@@ -50,7 +52,7 @@ static retro_audio_sample_batch_t audio_batch_cb  = NULL;
 static retro_input_poll_t input_poll_cb           = NULL;
 static retro_input_state_t input_state_cb         = NULL;
 static retro_environment_t environ_cb             = NULL;
-static retro_video_refresh_t video_cb             = NULL;
+       retro_video_refresh_t video_cb             = NULL;
 
 static unsigned frame_count = 0;
 static unsigned internal_frame_count = 0;
@@ -75,8 +77,8 @@ int setting_crosshair_color_p2 = 0x0080FF;
 
 char retro_save_directory[4096];
 char retro_base_directory[4096];
-static char retro_cd_base_directory[4096];
-static char retro_cd_path[4096];
+char retro_cd_base_directory[4096];
+char retro_cd_path[4096];
 char retro_cd_base_name[4096];
 
 #ifndef RETRO_SLASH
@@ -719,6 +721,8 @@ bool retro_load_game(const struct retro_game_info *info)
       environ_cb(RETRO_ENVIRONMENT_SET_CORE_OPTIONS_DISPLAY, &option_display);
    }
 
+   libRR_handle_load_game(info, environ_cb);
+
    return true;
 }
 
@@ -843,7 +847,7 @@ void retro_run(void)
 
    fb = pix;
 
-   video_cb(fb, game_width, game_height, pitch);
+   libRR_video_cb(fb, game_width, game_height, pitch);
 
    video_frames++;
    audio_frames += spec.SoundBufSize;

@@ -417,7 +417,7 @@ else
    CC ?= gcc
    CXX ?= g++
    SHARED := -shared -Wl,--no-undefined -Wl,--version-script=link.T
-   LDFLAGS += -static-libgcc -static-libstdc++ -lwinmm
+   LDFLAGS += -static-libgcc -lwinmm
    ifeq ($(HAVE_OPENGL),1)
       GL_LIB := -lopengl32
    endif
@@ -426,6 +426,8 @@ else
 endif
 
 include Makefile.common
+libRetroReversingConsole = Saturn
+include ./libRetroReversing/Makefile.retroreversing
 
 WARNINGS := -Wall \
    -Wno-sign-compare \
